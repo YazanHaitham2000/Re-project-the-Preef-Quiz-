@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+  
+    <style>
+        /* Additional styles to match previous pages */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #050C9C; /* Main background color */
+            color: #050C9C; /* Text color */
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            position: relative;
+            font-weight: 600;
+        }
+
+
+        .container4 {
+            justify-content: center;
+          
+            text-align: center;
+        }
+
+        .div-data {
+            justify-content: center;
+            background-color: #FFF; /* Container background color */
+            padding: 2%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            margin: 20%;
+            margin-top: 10%;
+        }
+        .table > th,
+td {
+  width: 33.3vw;
+}
+        .div-contain-data {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .div-data p {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+
+        .div-data-input p {
+            font-size: 20px;
+            font-weight: bold;
+            color: #050C9C;
+        }
+
+        #view-answer-btn {
+            background-color: #050C9C; /* Button background color */
+            color: #FFF; /* Button text color */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #table {
+            width: 90%;
+            margin: 2% auto;
+            border-collapse: collapse;
+            display: none;
+        }
+
+        #table th, #table td {
+            border: 1px solid #FFF;
+            padding: 8px;
+            text-align: center;
+            color: white;
+        }
+
+  
+
+
+        #table .correct {
+            background-color: #24a150; /* Correct answer row background color */
+        }
+
+        #table .incorrect {
+            background-color: #d0571a; /* Incorrect answer row background color */
+        }
+        .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 2%;
+    background-color: white;
+    
+}
+
+.logo {
+    font-size: xx-large; /* حجم الخط يعتمد على عرض النافذة */
+    font-weight: 900;
+    color: #050C9C;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    display: flex;
+
+}
+
+.nav-links li {
+    margin: 0 4%;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #050C9C;
+    font-size:x-large; /* حجم الخط يعتمد على عرض النافذة */
+}
+
+.auth-buttons {
+    display: flex;
+    margin-right:2%;
+    width: 10%;
+}
+
+.auth-buttons button {
+    background-color: #050C9C;
+    color: white;
+    border-radius: 1px;
+    padding: 1% 2%;
+   
+    margin: 7%;
+    cursor: pointer;
+    font-size: 20px; /* حجم الخط يعتمد على عرض النافذة */
+}
+
+.auth-buttons button:hover {
+    background-color: white;
+    color: black;
+}
+.auth-buttons a {text-decoration: none; color: #050C9C; font-size: x-large;}
+.div-data{height: 100%;}
+    </style>
+</head>
+<body>
+  
+    <nav class="navbar">
+        <div class="logo">ABC</div>
+        <div class="nav-links">
+            <li><a href="home-after.html">Home</a></li>
+      
+           
+        </div>
+        <div class="auth-buttons">
+            <a href="#"  ><span id="welcome-name"></span></a>
+        </div>
+    </nav>
+    <div class="container4">
+        <div class="div-data">
+            <div class="div-contain-data">
+                <div class="div-dataleft">
+                    <p>Score</p>
+                    <p>Right answers</p>
+                    <p>Wrong answers</p>
+                </div>
+                <div class="div-data-input">
+                    <p id="score"></p>
+                    <p id="correctAnswers"></p>
+                    <p id="incorrectAnswers"></p>
+                </div>
+            </div>
+            <button id="view-answer-btn" onclick="showAnswers()">View answers</button>
+
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Your answer</th>
+                        <th>Correct answer</th>
+                    </tr>
+                </thead>
+                <tbody id="resultContainer"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function loadResults() {
+            const correctAnswers = JSON.parse(localStorage.getItem("correctAnswers")) || [];
+            const incorrectAnswers = JSON.parse(localStorage.getItem("incorrectAnswers")) || [];
+            const resultContainer = document.getElementById("resultContainer");
+        
+            // دمج المصفوفات وترتيبها بناءً على رقم السؤال
+            const allAnswers = [...correctAnswers, ...incorrectAnswers].sort((a, b) => a.page - b.page);
+        
+            allAnswers.forEach((item) => {
+                const row = document.createElement("tr");
+                if (item.correctAnswer) { // إجابة غير صحيحة
+                    row.classList.add("result", "incorrect");
+                    row.innerHTML = `<td>Question ${item.page}</td><td>${item.selectedAnswer}</td><td>${item.correctAnswer}</td>`;
+                } else { // إجابة صحيحة
+                    row.classList.add("result", "correct");
+                    row.innerHTML = `<td>Question ${item.page}</td><td>Correct</td><td>-</td>`;
+                }
+                resultContainer.appendChild(row);
+            });
+        
+            const totalQuestions = correctAnswers.length + incorrectAnswers.length;
+            const score = correctAnswers.length;
+            const passMark = Math.ceil(totalQuestions * 0.5);
+        
+            if (score >= passMark) {
+                document.getElementById("table").style.backgroundColor = "#24a150";
+            } else {
+                document.getElementById("table").style.backgroundColor = "#d0571a";
+            }
+        
+            document.getElementById("score").textContent = `${score} / ${totalQuestions}`;
+            document.getElementById("correctAnswers").textContent = `${correctAnswers.length}`;
+            document.getElementById("incorrectAnswers").textContent = `${incorrectAnswers.length}`;
+        
+            // Clear localStorage after displaying results
+            localStorage.removeItem("correctAnswers");
+            localStorage.removeItem("incorrectAnswers");
+            localStorage.removeItem("remainingTime");
+        }
+        
+        function showAnswers() {
+            const table = document.getElementById("table");
+            table.style.display = "block";
+        }
+        
+        window.onload = loadResults;
+        </script>
+           <script>
+            // استرجاع currentUser من localStorage ونقله إلى sessionStorage
+            document.addEventListener("DOMContentLoaded", function() {
+                const currentUserString = localStorage.getItem("currentUser");
+                if (currentUserString) {
+                    sessionStorage.setItem("currentUser", currentUserString);
+                    localStorage.removeItem("currentUser");
+                }
+        
+                // جلب currentUser من sessionStorage
+                const sessionUserString = sessionStorage.getItem("currentUser");
+        
+                // التحقق إذا كان currentUser غير موجود
+                if (!sessionUserString) {
+                    // إعادة توجيه المستخدم إلى الصفحة الرئيسية أو أي صفحة أخرى تحددها
+                    window.location.href = "index.html"; // قم بتعديل هذا الرابط إلى الصفحة المناسبة
+                } else {
+                    const currentUser = JSON.parse(sessionUserString);
+        
+                    // Get the name from currentUser object
+                    const userName = currentUser.Name;
+        
+                    // Update the welcome message
+                    const welcomeNameSpan = document.getElementById("welcome-name");
+                    welcomeNameSpan.textContent = userName;
+                }
+            });
+        </script>
+        
+</body>
+</html>

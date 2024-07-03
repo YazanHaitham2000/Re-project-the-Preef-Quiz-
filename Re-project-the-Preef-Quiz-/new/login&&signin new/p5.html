@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="new.css">
+</head>
+<body>
+    <div class="background-letters" id="background-letters"></div>
+
+    <header>
+        <nav class="navbar">
+            <div class="logol">
+              <a href="#" class="logo">ABC</a>
+            </div>
+            <div class="logol">
+              <a href="#"  class="logoo"><span id="welcome-name"></span></a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="quiz-container">
+            <h1 class="animated"><p id="timer"></p></h1>
+            <!-- Timer Display -->
+            <p id="timer"></p>
+
+            <!-- Question 1 -->
+            <div class="question animated">
+                <h2>Question: Which of these is a preposition?</h2>
+                <div class="answer-options">
+                    <div>
+                        <input type="radio" name="question" class="a" id="option1" value="A. Quickly">
+                        <label for="option1">A. Quickly</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="question" class="a" id="option2" value="B. Under">
+                        <label for="option2">B. Under</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="question" class="a" id="option3" value="C. Happiness">
+                        <label for="option3">C. Happiness</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="question" class="a" id="option4" value="D. Running">
+                        <label for="option4">D. Running</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Button -->
+            <button type="button" id="nextButton" class="submit-button" onclick="window.location.href = 'p6.html';">Next</button>
+        </section>
+
+        <!-- Page Numbers -->
+        <div class="qnum">
+            <div data-page="1">1</div>
+            <div data-page="2">2</div>
+            <div data-page="3">3</div>
+            <div data-page="4">4</div>
+            <div data-page="5">5</div>
+            <div data-page="6">6</div>
+        </div>
+    </main>
+
+    <script>
+     
+      // رقم الصفحة الحالية
+      const pageNumber = 5;
+
+      // وبدء العداد
+      function startTimer(duration, display) {
+        let timer = duration,
+          minutes,
+          seconds;
+        // إعداد مؤقت لتحديث العداد كل ثانية
+        const intervalId = setInterval(function () {
+          // حساب الدقائق والثواني المتبقية
+          minutes = parseInt(timer / 60, 10);
+          seconds = parseInt(timer % 60, 10);
+
+          // إضافة صفر إذا كانت القيم أقل من 10 لتنسيق الوقت بشكل صحيح
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+
+          // تحديث عرض الوقت
+          display.textContent = minutes + ":" + seconds;
+
+          // التحقق من انتهاء العداد
+          if (--timer < 0) {
+            clearInterval(intervalId); // إيقاف المؤقت
+            timer = 0;
+            // انتقال لصفحة النتيجة
+            window.location.href="result.html" // رابط صفحة النتيجة
+          }
+
+          // بحفظ الوقت الضايل في localStorage
+          localStorage.setItem("remainingTime", timer);
+        }, 1000);
+      }
+
+      //  بحفظ الإجابات يلي اخترتها
+      function saveAnswer() {
+        const selectedOption = document.querySelector(
+          'input[name="question"]:checked'
+        );
+        if (selectedOption) {
+          const selectedAnswer = selectedOption.value;
+          const correctAnswer = "A. Quickly"; //  الإجابة الصحيحة  لصفحة هي 2
+          let correctAnswers =
+            JSON.parse(localStorage.getItem("correctAnswers")) || [];
+          let incorrectAnswers =
+            JSON.parse(localStorage.getItem("incorrectAnswers")) || [];
+
+          //   بقارن الإجابات يلي اخترتها مع الاجابة الصح
+          if (selectedAnswer === correctAnswer) {
+            correctAnswers.push({ page: pageNumber, answer: selectedAnswer });
+          } else {
+            incorrectAnswers.push({
+              page: pageNumber,
+              selectedAnswer: selectedAnswer,
+              correctAnswer: correctAnswer,
+            });
+          }
+
+          localStorage.setItem(
+            "correctAnswers",
+            JSON.stringify(correctAnswers)
+          );
+          localStorage.setItem(
+            "incorrectAnswers",
+            JSON.stringify(incorrectAnswers)
+          );
+        }
+      }
+      
+
+      // بستدعي الاجابات يلي احفضتها
+      function loadAnswer() {
+        const savedAnswer =
+          JSON.parse(localStorage.getItem("selectedAnswers")) || {};
+        if (savedAnswer[pageNumber]) {
+          const optionToCheck = document.querySelector(
+            `input[name="question"][value="${savedAnswer[pageNumber]}"]`
+          );
+          if (optionToCheck) {
+            optionToCheck.checked = true;
+          }
+        }
+      }
+      
+      // وظيفة لتسليط الضوء على الصفحة الحالية في شريط الأرقام
+      function highlightCurrentPage() {
+        const pageDivs = document.querySelectorAll(".qnum div");
+        pageDivs.forEach((div) => {
+          div.classList.remove("current-page");
+          if (parseInt(div.dataset.page) === pageNumber) {
+            div.classList.add("current-page");
+          }
+        });
+        }
+        
+         // وظيفة لإضافة تأثير hover لتسليط الضوء على الصفحة الحالية    
+      function addHoverEffect() {
+        const pageDivs = document.querySelectorAll(".qnum div");
+        pageDivs.forEach((div) => {
+          div.addEventListener("mouseenter", function () {
+            div.classList.add("current-page");
+          });
+          div.addEventListener("mouseleave", function () {
+            if (parseInt(div.dataset.page) !== pageNumber) {
+              div.classList.remove("current-page");
+            }
+          });
+        });
+      }
+
+      // عند تحميل الصفحة
+      window.onload = function () {
+        const storedTime = localStorage.getItem("remainingTime");
+        const sixMinutes = 6 * 60; // إعداد العداد ل6 دقائق
+        const duration = storedTime ? parseInt(storedTime, 10) : sixMinutes;
+        const display = document.querySelector("#timer");
+        startTimer(duration, display); // بدء العداد
+        loadAnswer(); // تحميل الإجابة المحفوظة
+        highlightCurrentPage(); // تسليط الضوء على الصفحة الحالية
+        addHoverEffect(); // إضافة تأثير hover
+
+        //   بحفظ الإجابة عند النقر على زر "التالي"
+        const nextButton = document.getElementById("nextButton");
+        nextButton.addEventListener("click", function (event) {
+          saveAnswer();
+        });
+      };
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const radioButtons = document.querySelectorAll('input[name="question"]');
+        const nextButton = document.getElementById("nextButton");
+    
+        function displayNextButton() {
+          radioButtons.forEach(radio => {
+            radio.addEventListener("change", function() {
+              nextButton.style.display = "block";
+            });
+          });
+        }
+    
+        // Initialize the displayNextButton function
+        displayNextButton();
+      });
+    </script>
+   <script>
+    // استرجاع currentUser من localStorage ونقله إلى sessionStorage
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentUserString = localStorage.getItem("currentUser");
+        if (currentUserString) {
+            sessionStorage.setItem("currentUser", currentUserString);
+            localStorage.removeItem("currentUser");
+        }
+
+        // جلب currentUser من sessionStorage
+        const sessionUserString = sessionStorage.getItem("currentUser");
+
+        // التحقق إذا كان currentUser غير موجود
+        if (!sessionUserString) {
+            // إعادة توجيه المستخدم إلى الصفحة الرئيسية أو أي صفحة أخرى تحددها
+            window.location.href = "index.html"; // قم بتعديل هذا الرابط إلى الصفحة المناسبة
+        } else {
+            const currentUser = JSON.parse(sessionUserString);
+
+            // Get the name from currentUser object
+            const userName = currentUser.Name;
+
+            // Update the welcome message
+            const welcomeNameSpan = document.getElementById("welcome-name");
+            welcomeNameSpan.textContent = userName;
+        }
+    });
+</script>
+
+    <script>
+        const lettersContainer = document.getElementById('background-letters');
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+        function createLetter() {
+            const letter = document.createElement('span');
+            letter.textContent = letters[Math.floor(Math.random() * letters.length)];
+            letter.style.top = Math.random() * 100 + 'vh';
+            letter.style.left = Math.random() * 100 + 'vw';
+            letter.style.fontSize = Math.random() * 2 + 1 + 'rem';
+            letter.style.animationDuration = Math.random() * 10 + 5 + 's';
+            lettersContainer.appendChild(letter);
+
+            setTimeout(() => {
+                letter.remove();
+            }, 15000); // Remove letter after animation
+        }
+
+        setInterval(createLetter, 500); // Create new letter every 500ms
+    </script>
+</body>
+</html>

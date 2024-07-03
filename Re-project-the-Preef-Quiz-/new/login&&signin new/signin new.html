@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin Page</title>
+    <link rel="stylesheet" href="signin.css">
+</head>
+<body>
+    <div class="background-letters" id="background-letters"></div>
+    <nav class="navbar">
+    
+        <div class="logo">ABC</div>
+        <ul class="nav-links">
+     
+            <li><a href="home.html">Home</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <button class="signin"   onclick=singup()>LogIn</button>
+           
+        </div>
+        <div class="menu-icon">
+            <span>&#9776;</span>
+        </div>
+    </nav>
+    <div class="sing">
+    <div class="login-container">
+        <h1>Sign in</h1>
+        <form id="form">
+            <label for="username">User name:</label>
+            <input type="text" id="username" name="username" required>
+            <div id="s-nvald"></div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+            <div id="s-evald"></div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <div id="s-pvald1"></div>
+            <label for="co-password">Co-Password:</label>
+            <input type="password" id="co-password" name="co-password" required>
+            <div id="s-pvald2"></div>
+            <button type="submit" id="signin " class="loginb">Sign in</button>
+        </form>
+    </div></div>
+    <script src="login&&signin new.js"></script>
+    <script>function singup(){window.location = "login new.html";}</script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const backgroundLetters = document.getElementById("background-letters");
+    
+        function createFloatingLetter() {
+            const span = document.createElement("span");
+            span.textContent = letters[Math.floor(Math.random() * letters.length)];
+            span.style.left = Math.random() * 100 + "vw";
+            span.style.top = Math.random() * 100 + "vh";
+            span.style.fontSize = Math.random() * 3 + 1 + "rem";
+            span.style.animationDuration = Math.random() * 5 + 5 + "s";
+            span.style.animationDelay = Math.random() * 5 + "s";
+            backgroundLetters.appendChild(span);
+    
+            // Remove the span after its animation ends
+            span.addEventListener('animationend', () => {
+                span.remove();
+            });
+        }
+    
+        // Create multiple letters initially
+        for (let i = 0; i < 50; i++) {
+            createFloatingLetter();
+        }
+    
+        // Create a new letter every 1 second
+        setInterval(createFloatingLetter, 1000);
+    });
+    </script>
+</body>
+</html>

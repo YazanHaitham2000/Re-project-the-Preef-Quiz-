@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Bar</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href= "css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
+    rel="stylesheet">
+</head>
+<body>
+   
+    <nav class="navbar">
+    
+        <div class="logo">ABC</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#v">Video</a></li>
+            <li><a href="#d">Dependability</a></li>
+            <li><a href="#q">Quizzes</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <button class="signin" onclick="logout()">log out</button>
+           
+        </div>
+        <div class="menu-icon">
+            <span>&#9776;</span>
+        </div>
+    </nav>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuIcon = document.querySelector('.menu-icon');
+        const navLinks = document.querySelector('.nav-links');
+        const authButtons = document.querySelector('.auth-buttons');
+    
+        menuIcon.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            authButtons.classList.toggle('active');
+        });
+    });
+    </script>
+ 
+    <div class="container">
+     
+        <div class="text">
+            <h1 id="h1">Test yourself in English (<span id="welcome-name"></span>)</h1>
+            <p id="p1">Determine your level of English language?</p>
+            <p id="p2">Get your level certificate now!!</p>
+            <a href="#" class="button" id="btn1">Let's Get Started</a>
+        </div>
+        <div class="rocket">
+            <img src="klipartz.com.png" alt="Rocket">
+        </div>
+    </div>
+    <h1 class="title" id="v">Video</h1>
+    <div class="container1">
+        <div class="text1">
+            <h1 id="h1"> English </h1>
+            <h2 id="p1">Welcome to a new video! In this video, we will explain a web project specialized in questions and answers In this video, we will explain a web project specialized in questions and answers.</h2>
+        </div>
+        <div class="rocket1">
+            <iframe
+            id="video"
+            
+            frameborder="0"
+            allowfullscreen
+        
+          ></iframe>
+   
+        </div>
+    </div>
+
+
+    <!----------card------------>
+    <h1 class="title" id="d">Dependability</h1>
+    <!--------------section3------------->
+    <div class="logo-container">
+      
+      
+        <div class="icon-grid">
+            <div class="icon"><i class="fas fa-book"></i><p>EF Education First</p></div>
+            <div class="icon"><i class="fas fa-certificate"></i><p>British Council</p></div>
+            <div class="icon"><i class="fas fa-laptop"></i><p>Wall Street English</p></div>
+            <div class="icon"><i class="fas fa-code"></i><p>Kaplan International</p></div>
+            <div class="icon"><i class="fas fa-chalkboard-teacher"></i><p>Berlitz</p></div>
+            <div class="icon"><i class="fas fa-school"></i><p>Rosetta Stone</p></div>
+            <div class="icon"><i class="fas fa-laptop-code"></i><p>VIPKid</p></div>
+            <div class="icon"><i class="fas fa-university"></i><p>iTutorGroup</p></div>
+            <div class="icon"><i class="fas fa-user-graduate"></i><p>DadaABC</p></div>
+            <div class="icon"><i class="fas fa-blog"></i><p>Open English</p></div>
+            <div class="icon"><i class="fas fa-graduation-cap"></i><p>Lingoda</p></div>
+            <div class="icon"><i class="fas fa-certificate"></i><p>Cambly</p></div>
+        </div>
+   </div>
+   <h1 class="title" id="q">Quizzes</h1>
+    <div class="container4">
+        
+        <div class="card">
+            <div class="circle green">A1</div>
+            <h2>A1 (Beginner/Elementary):</h2>
+            <p>Understands and uses basic everyday expressions, introduces themselves and others, and asks and answers personal questions.</p>
+            <button onclick="start()" >START QUIZ</button>
+        </div>
+        <div class="card">
+            <div class="circle blue">A2</div>
+            <h2>A2 (Pre-Intermediate):</h2>
+            <p>Communicates in simple tasks with clear information exchange. Understands basic sentences and expressions for immediate needs.</p>
+            <button onclick="start()">START QUIZ</button>
+        </div>
+        <div class="card">
+            <div class="circle pink">B1</div>
+            <h2>B1 (Intermediate):</h2>
+            <p>Communicates in simple tasks with clear information exchange. Understands basic sentences and expressions for immediate needs.</p>
+            <button onclick="start()">START QUIZ</button>
+        </div>
+        <div class="card">
+            <div class="circle red">B2</div>
+            <h2>B2 (Upper-Intermediate):</h2>
+            <p>Communicates in simple tasks with clear information exchange. Understands basic sentences and expressions for immediate needs.</p>
+            <button onclick="start()">START QUIZ</button>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Your Website. All rights reserved.</p>
+    </div>
+
+        <script src="API_Youtube.js"></script>
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUserString = sessionStorage.getItem("currentUser");
+            if (currentUserString) {
+                const currentUser = JSON.parse(currentUserString);
+                document.getElementById("welcome-name").textContent = currentUser.Name;
+            } else {
+                window.location.href = "index_Brif.html"; // Redirect to login page if not logged in
+            }
+        });
+        
+        function logout() {
+            sessionStorage.removeItem("currentUser"); // Clear user data on logout
+            window.location.href = "home.html"; // Redirect to login page
+        }
+        </script>
+           <script>function start(){window.location = "p1.html";}</script>
+        
+</body>
+</html>
